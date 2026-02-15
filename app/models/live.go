@@ -37,8 +37,9 @@ func CreateLive(live Live) error {
 
 func GetArtistCounts(userID string) ([]ArtistCount, error) {
 
-	today := time.Now()
+	t := time.Now()
 
+	today := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 	rows, err := DB.Query(`
 		SELECT artist, COUNT(*) as count
 		FROM lives
