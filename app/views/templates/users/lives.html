@@ -29,7 +29,7 @@
         <tbody>
         {{range .Future}}
           <tr class="border-b hover:bg-gray-50">
-            <td class="py-2">{{.Date}}</td>
+            <td class="py-2">{{ .Date.Format "2006/01/02" }}</td>
             <td>{{.Artist}}</td>
             <td>{{.Venue}}</td>
           </tr>
@@ -60,7 +60,7 @@
         <tbody>
         {{range .Past}}
           <tr class="border-b hover:bg-gray-50">
-            <td class="py-2">{{.Date}}</td>
+            <td class="py-2">{{ .Date.Format "2006/01/02" }}</td>
             <td>{{.Artist}}</td>
             <td>{{.Venue}}</td>
           </tr>

@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"liveconnect/app/models"
 )
@@ -68,17 +69,23 @@ func LivesCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	artist := r.FormValue("artist")
-	date := r.FormValue("date")
+	dateStr := r.FormValue("date")
 	venue := r.FormValue("venue")
+
+	parsedDate, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		http.Error(w, "Invalid date format", 400)
+		return
+	}
 
 	live := models.Live{
 		UserID: userID,
 		Artist: artist,
-		Date:   date,
+		Date:   parsedDate,
 		Venue:  venue,
 	}
 
-	err := models.CreateLive(live)
+	err = models.CreateLive(live)
 	if err != nil {
 		http.Error(w, "DB Error", 500)
 		return
@@ -161,21 +168,27 @@ func LivesUpdate(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	artist := r.FormValue("artist")
-	date := r.FormValue("date")
+	dateStr := r.FormValue("date")
 	venue := r.FormValue("venue")
 
 	var liveID int
 	fmt.Sscan(id, &liveID)
 
+	parsedDate, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		http.Error(w, "Invalid date format", 400)
+		return
+	}
+
 	live := models.Live{
 		ID:     liveID,
 		UserID: userID,
 		Artist: artist,
-		Date:   date,
+		Date:   parsedDate,
 		Venue:  venue,
 	}
 
-	err := models.UpdateLive(live)
+	err = models.UpdateLive(live)
 	if err != nil {
 		http.Error(w, "DB Error", 500)
 		return

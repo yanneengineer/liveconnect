@@ -9,7 +9,7 @@ type Live struct {
 	UserID string
 	Name   string
 	Artist string
-	Date   string
+	Date   time.Time
 	Venue  string
 }
 
@@ -21,7 +21,7 @@ type ArtistCount struct {
 func CreateLive(live Live) error {
 	query := `
 	INSERT INTO lives (user_id, artist, date, venue)
-	VALUES (?, ?, ?, ?)
+	VALUES ($1, $2, $3, $4)
 	`
 
 	_, err := DB.Exec(
@@ -37,13 +37,13 @@ func CreateLive(live Live) error {
 
 func GetArtistCounts(userID string) ([]ArtistCount, error) {
 
-	today := time.Now().Format("2006-01-02")
+	today := time.Now()
 
 	rows, err := DB.Query(`
 		SELECT artist, COUNT(*) as count
 		FROM lives
-		WHERE user_id = ?
-		AND date < ?
+		WHERE user_id = $1
+		AND date < $2
 		GROUP BY artist
 		ORDER BY count DESC
 	`, userID, today)
@@ -70,7 +70,7 @@ func GetLivesGrouped(userID string) ([]Live, []Live, error) {
 	rows, err := DB.Query(`
 		SELECT id, user_id, artist, date, venue
 		FROM lives
-		WHERE user_id = ?
+		WHERE user_id = $1
 		ORDER BY date
 	`, userID)
 	if err != nil {
@@ -84,27 +84,22 @@ func GetLivesGrouped(userID string) ([]Live, []Live, error) {
 	today := time.Now().Truncate(24 * time.Hour)
 
 	for rows.Next() {
-		var l Live
+		var live Live
 		err := rows.Scan(
-			&l.ID,
-			&l.UserID,
-			&l.Artist,
-			&l.Date,
-			&l.Venue,
+			&live.ID,
+			&live.UserID,
+			&live.Artist,
+			&live.Date,
+			&live.Venue,
 		)
 		if err != nil {
 			return nil, nil, err
 		}
 
-		liveDate, err := time.Parse("2006-01-02", l.Date)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		if liveDate.Before(today) {
-			past = append(past, l)
+		if live.Date.Before(today) {
+			past = append(past, live)
 		} else {
-			future = append(future, l)
+			future = append(future, live)
 		}
 	}
 
@@ -115,7 +110,7 @@ func GetLivesByUser(userID string) (map[string]interface{}, error) {
 
 	var userName string
 	err := DB.QueryRow(
-		"SELECT name FROM users WHERE id = ?",
+		"SELECT name FROM users WHERE id = $1",
 		userID,
 	).Scan(&userName)
 	if err != nil {
@@ -126,7 +121,7 @@ func GetLivesByUser(userID string) (map[string]interface{}, error) {
         SELECT l.id, l.user_id, u.name, l.artist, l.date, l.venue
         FROM lives l
         INNER JOIN users u ON l.user_id = u.id
-        WHERE l.user_id = ?
+        WHERE l.user_id = $1
         ORDER BY l.date
     `, userID)
 	if err != nil {
@@ -134,8 +129,8 @@ func GetLivesByUser(userID string) (map[string]interface{}, error) {
 	}
 	defer rows.Close()
 
-	var futureLives []Live
-	var pastLives []Live
+	var future []Live
+	var past []Live
 
 	today := time.Now().Truncate(24 * time.Hour)
 
@@ -153,29 +148,24 @@ func GetLivesByUser(userID string) (map[string]interface{}, error) {
 			return nil, err
 		}
 
-		liveDate, err := time.Parse("2006-01-02", live.Date)
-		if err != nil {
-			return nil, err
-		}
-
-		if liveDate.Before(today) {
-			pastLives = append(pastLives, live)
+		if live.Date.Before(today) {
+			past = append(past, live)
 		} else {
-			futureLives = append(futureLives, live)
+			future = append(future, live)
 		}
 	}
 
 	return map[string]interface{}{
 		"Name":   userName,
-		"Future": futureLives,
-		"Past":   pastLives,
+		"Future": future,
+		"Past":   past,
 	}, nil
 }
 
 func DeleteLiveByID(liveID string, userID string) error {
 	query := `
 		DELETE FROM lives
-		WHERE id = ? AND user_id = ?
+		WHERE id = $1 AND user_id = $2
 	`
 	_, err := DB.Exec(query, liveID, userID)
 	return err
@@ -187,7 +177,7 @@ func GetLiveByID(liveID string, userID string) (Live, error) {
 	query := `
 		SELECT id, user_id, artist, date, venue
 		FROM lives
-		WHERE id = ? AND user_id = ?
+		WHERE id = $1 AND user_id = $2
 	`
 
 	err := DB.QueryRow(query, liveID, userID).Scan(
@@ -204,8 +194,8 @@ func GetLiveByID(liveID string, userID string) (Live, error) {
 func UpdateLive(live Live) error {
 	query := `
 		UPDATE lives
-		SET artist = ?, date = ?, venue = ?
-		WHERE id = ? AND user_id = ?
+		SET artist = $1, date = $2, venue = $3
+		WHERE id = $4 AND user_id = $5
 	`
 
 	_, err := DB.Exec(

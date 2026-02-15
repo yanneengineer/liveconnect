@@ -19,7 +19,7 @@ func GetAllUsers(id string) ([]User, error) {
 	rows, err := DB.Query(`
 		SELECT id, name
 		FROM users
-		WHERE NOT id = ?
+		WHERE NOT id = $1
 		ORDER BY id
 	`, id)
 	if err != nil {
@@ -47,7 +47,7 @@ func AuthenticateUser(id, password string) (*User, error) {
 	err := DB.QueryRow(`
 		SELECT id, name, password
 		FROM users
-		WHERE id = ?
+		WHERE id = $1
 	`, id).Scan(&user.ID, &user.Name, &user.Password)
 
 	if err != nil {
@@ -82,7 +82,7 @@ func CreateUser(id, name, password string) error {
 
 	query := `
 	INSERT INTO users (id, name, password)
-	VALUES (?, ?, ?)
+	VALUES ($1, $2, $3)
 	`
 	_, err = DB.Exec(query, id, name, string(hashedPassword))
 
@@ -94,7 +94,7 @@ func GetUserByID(id string) (User, error) {
 	err := DB.QueryRow(`
 		SELECT id, name, password
 		FROM users
-		WHERE id = ?
+		WHERE id = $1
 	`, id).Scan(&user.ID, &user.Name, &user.Password)
 	return user, err
 }
@@ -102,7 +102,7 @@ func GetUserByID(id string) (User, error) {
 func ExistsUserID(id string) (bool, error) {
 	var count int
 	err := DB.QueryRow(`
-		SELECT COUNT(*) FROM users WHERE id = ?
+		SELECT COUNT(*) FROM users WHERE id = $1
 	`, id).Scan(&count)
 	return count > 0, err
 }
@@ -110,7 +110,7 @@ func ExistsUserID(id string) (bool, error) {
 func ExistsUserName(name string) (bool, error) {
 	var count int
 	err := DB.QueryRow(`
-		SELECT COUNT(*) FROM users WHERE name = ?
+		SELECT COUNT(*) FROM users WHERE name = $1
 	`, name).Scan(&count)
 	return count > 0, err
 }

@@ -3,10 +3,11 @@ package models
 import (
 	"database/sql"
 	"log"
+	"os"
 
 	"liveconnect/config"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 var DB *sql.DB
@@ -14,10 +15,12 @@ var DB *sql.DB
 func InitDB() {
 	var err error
 
-	DB, err = sql.Open(
-		config.Config.DB.SQLDriver,
-		config.Config.DB.Name,
-	)
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		dsn = config.Config.DB.Name
+	}
+
+	DB, err = sql.Open(config.Config.DB.SQLDriver, dsn)
 	if err != nil {
 		log.Fatal("DB接続失敗:", err)
 	}
@@ -33,10 +36,10 @@ func createTables() {
 	// lives テーブル
 	createLivesTable := `
 	CREATE TABLE IF NOT EXISTS lives (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		id SERIAL PRIMARY KEY,
 		user_id VARCHAR(8),
 		artist TEXT NOT NULL,
-		date TEXT NOT NULL,
+		date TIMESTAMP NOT NULL,
 		venue TEXT NOT NULL
 	);
 	`
