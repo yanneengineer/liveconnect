@@ -4,9 +4,13 @@ import (
 	"liveconnect/app/controllers"
 	"liveconnect/app/models"
 	"liveconnect/config"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	godotenv.Load()
 	// 設定読み込み
 	config.LoadConfig()
 

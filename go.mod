@@ -2,8 +2,6 @@ module liveconnect
 
 go 1.25
 
-require gopkg.in/ini.v1 v1.67.1
-
 require (
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/gorilla/sessions v1.4.0
@@ -11,3 +9,5 @@ require (
 )
 
 require github.com/lib/pq v1.11.2
+
+require github.com/joho/godotenv v1.5.1 

@@ -1,9 +1,7 @@
 package config
 
 import (
-	"log"
-
-	"gopkg.in/ini.v1"
+	"os"
 )
 
 // Web設定
@@ -29,23 +27,26 @@ type AppConfig struct {
 // グローバルで参照する設定
 var Config AppConfig
 
-// config.ini を読み込む
-func LoadConfig() {
-	cfg, err := ini.Load("config.ini")
-	if err != nil {
-		log.Fatal("config.ini の読み込みに失敗:", err)
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
 	}
+	return defaultValue
+}
+
+// LoadConfig は環境変数から設定を読み込む
+func LoadConfig() {
 
 	Config = AppConfig{
 		Web: WebConfig{
-			Port:    cfg.Section("web").Key("port").String(),
-			LogFile: cfg.Section("web").Key("logfile").String(),
-			Static:  cfg.Section("web").Key("static").String(),
-			Views:   cfg.Section("web").Key("views").String(),
+			Port:    getEnv("WEB_PORT", "8080"),
+			LogFile: getEnv("WEB_LOGFILE", "webapp.log"),
+			Static:  getEnv("WEB_STATIC", "app/static"),
+			Views:   getEnv("WEB_VIEWS", "app/views"),
 		},
 		DB: DBConfig{
-			SQLDriver: cfg.Section("db").Key("sqldriver").String(),
-			Name:      cfg.Section("db").Key("name").String(),
+			SQLDriver: getEnv("DB_DRIVER", "postgres"),
+			Name:      getEnv("DB_NAME", ""),
 		},
 	}
 }
