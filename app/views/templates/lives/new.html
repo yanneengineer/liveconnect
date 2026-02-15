@@ -1,0 +1,45 @@
+{{ define "content" }}
+
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-2xl font-bold">ライブ登録
+  </h2>
+
+  <div class="flex gap-3">
+    <a href="/lives"
+      class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+      ← ライブ一覧へ戻る
+    </a>
+  </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow p-8 max-w-xl">
+  <form action="/lives/create" method="POST" class="space-y-4">
+
+    <div>
+      <label class="block mb-1 font-medium">アーティスト</label>
+      <select name="artist" required class="w-full border rounded-lg px-3 py-2">
+        <option value="">選択してください</option>
+        <option value="乃木坂46">乃木坂46</option>
+        <option value="櫻坂46">櫻坂46</option>
+        <option value="日向坂46">日向坂46</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block mb-1 font-medium">日付</label>
+      <input type="date" name="date" required class="w-full border rounded-lg px-3 py-2">
+    </div>
+
+    <div>
+      <label class="block mb-1 font-medium">会場</label>
+      <input type="text" name="venue" required class="w-full border rounded-lg px-3 py-2">
+    </div>
+
+    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+      登録する
+    </button>
+
+  </form>
+</div>
+
+{{ end }}

@@ -1,0 +1,24 @@
+{{ define "content" }}
+
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-xl font-semibold mb-4">
+    {{ .UserName }} さんログイン中
+  </h2>
+</div>
+
+<div class="bg-white rounded-2xl shadow p-8">
+  <p class="text-gray-600 mb-6">
+    ライブ参戦を記録・共有するアプリ
+  </p>
+
+  <div class="flex gap-4">
+    <a href="/lives" class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+      ライブ一覧
+    </a>
+    <a href="/users" class="px-5 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+      ユーザー一覧
+    </a>
+  </div>
+</div>
+
+{{ end }}

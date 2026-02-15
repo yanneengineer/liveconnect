@@ -1,0 +1,106 @@
+{{ define "content" }}
+
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-2xl font-bold">ライブ一覧</h2>
+
+  <div class="flex gap-3">
+    <a href="/lives/new"
+      class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+      ＋ ライブ登録
+    </a>
+
+    <a href="/home"
+      class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+      ← ホームへ戻る
+    </a>
+  </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow p-6 mb-8">
+  <h3 class="text-lg font-semibold mb-4">今後のライブ</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="border-b">
+          <th class="py-2">日付</th>
+          <th>アーティスト</th>
+          <th>会場</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {{range .Future}}
+        <tr class="border-b hover:bg-gray-50">
+          <td class="py-2">{{.Date}}</td>
+          <td>{{.Artist}}</td>
+          <td>{{.Venue}}</td>
+          <td>
+            <a href="/lives/edit?id={{.ID}}" class="text-indigo-600 hover:underline">編集</a>
+          </td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="4" class="py-4 text-gray-500">
+            予定されているライブはありません
+          </td>
+        </tr>
+      {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow p-6 mb-8">
+  <h3 class="text-lg font-semibold mb-4">過去のライブ</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="border-b">
+          <th class="py-2">日付</th>
+          <th>アーティスト</th>
+          <th>会場</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {{range .Past}}
+        <tr class="border-b hover:bg-gray-50">
+          <td class="py-2">{{.Date}}</td>
+          <td>{{.Artist}}</td>
+          <td>{{.Venue}}</td>
+          <td>
+            <a href="/lives/edit?id={{.ID}}" class="text-indigo-600 hover:underline">編集</a>
+          </td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="4" class="py-4 text-gray-500">
+            過去ライブはまだありません
+          </td>
+        </tr>
+      {{end}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow p-6">
+  <h3 class="text-lg font-semibold mb-4">アーティスト別参戦回数</h3>
+  <table class="w-full text-left">
+    {{range .Rank}}
+    <tr class="border-b">
+      <td class="py-2">{{.Artist}}</td>
+      <td>{{.Count}}回</td>
+    </tr>
+    {{else}}
+    <tr>
+      <td class="py-4 text-gray-500">
+        まだライブ履歴がありません
+      </td>
+    </tr>
+    {{end}}
+  </table>
+</div>
+
+
+{{ end }}

@@ -1,0 +1,80 @@
+{{ define "content" }}
+
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-2xl font-bold">{{ .Name }} さんのライブ一覧
+  </h2>
+
+  <div class="flex gap-3">
+    <a href="/users"
+      class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+      ← ユーザー一覧へ戻る
+    </a>
+  </div>
+</div>
+
+<div class="space-y-10">
+
+  <div class="bg-white rounded-2xl shadow p-6">
+    <h2 class="text-xl font-bold mb-4">今後のライブ</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b">
+            <th class="py-2">日付</th>
+            <th>アーティスト</th>
+            <th>会場</th>
+          </tr>
+        </thead>
+        <tbody>
+        {{range .Future}}
+          <tr class="border-b hover:bg-gray-50">
+            <td class="py-2">{{.Date}}</td>
+            <td>{{.Artist}}</td>
+            <td>{{.Venue}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="3" class="py-4 text-gray-500">
+              予定されているライブはありません
+            </td>
+          </tr>
+        {{end}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow p-6">
+    <h2 class="text-xl font-bold mb-4">過去のライブ</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b">
+            <th class="py-2">日付</th>
+            <th>アーティスト</th>
+            <th>会場</th>
+          </tr>
+        </thead>
+        <tbody>
+        {{range .Past}}
+          <tr class="border-b hover:bg-gray-50">
+            <td class="py-2">{{.Date}}</td>
+            <td>{{.Artist}}</td>
+            <td>{{.Venue}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="3" class="py-4 text-gray-500">
+              過去ライブはまだありません
+            </td>
+          </tr>
+        {{end}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{{ end }}

@@ -1,0 +1,32 @@
+{{ define "base" }}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ .Title }} | LiveConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/css/app.css">
+  <script src="/static/js/app.js" defer></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<header class="bg-indigo-600 text-white shadow">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">
+      <a href="/home">LiveConnect</a>
+    </h1>
+    <nav class="space-x-6 text-sm">
+      <a href="/lives" class="hover:underline">ライブ一覧</a>
+      <a href="/users" class="hover:underline">ユーザー一覧</a>
+      <a href="/logout" class="hover:underline">ログアウト</a>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-10">
+  {{ template "content" . }}
+</main>
+
+</body>
+</html>
+{{ end }}

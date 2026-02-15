@@ -1,0 +1,58 @@
+{{ define "content" }}
+
+<div class="max-w-md mx-auto bg-white rounded-2xl shadow p-8">
+  <h2 class="text-2xl font-bold mb-6 text-center">
+    新規ユーザー登録
+  </h2>
+
+  {{if .Error}}
+  <p class="text-red-500 mb-4">
+    {{ .Error }}
+  </p>
+  {{end}}
+
+  <form action="/register/submit" method="post" class="space-y-4">
+
+    <div>
+      <label class="block mb-1 font-medium">ユーザーID</label>
+      <input type="text"
+             name="id"
+             maxlength="8"
+             pattern="[a-zA-Z0-9]+"
+             required
+             class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400">
+    </div>
+
+    <div>
+      <label class="block mb-1 font-medium">ユーザー名</label>
+      <input type="text"
+             name="name"
+             required
+             class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400">
+    </div>
+
+    <div>
+      <label class="block mb-1 font-medium">パスワード</label>
+      <input type="password"
+             name="password"
+             required
+             class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400">
+    </div>
+
+    <button type="submit"
+            class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+      登録する
+    </button>
+
+  </form>
+
+  <p class="text-center mt-6">
+    <a href="/"
+       class="text-indigo-600 hover:underline">
+      ← ログイン画面へ戻る
+    </a>
+  </p>
+
+</div>
+
+{{ end }}

@@ -1,0 +1,23 @@
+{{ define "content" }}
+
+<div class="max-w-md mx-auto bg-white rounded-2xl shadow p-8">
+  <h2 class="text-xl font-bold mb-6 text-center">ログイン</h2>
+
+  {{if .Error}}
+  <p class="text-red-500 mb-4">{{.Error}}</p>
+  {{end}}
+
+  <form method="POST" action="/login" class="space-y-4">
+    <input type="text" name="id" placeholder="ユーザーID" required class="w-full border rounded-lg px-3 py-2">
+    <input type="password" name="password" placeholder="パスワード" required class="w-full border rounded-lg px-3 py-2">
+    <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700">
+      ログイン
+    </button>
+  </form>
+
+  <p class="text-center mt-4">
+    <a href="/register" class="text-indigo-600 hover:underline">新規登録はこちら</a>
+  </p>
+</div>
+
+{{ end }}
