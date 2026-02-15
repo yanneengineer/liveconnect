@@ -2,7 +2,6 @@ package main
 
 import (
 	"liveconnect/app/controllers"
-	"liveconnect/app/models"
 	"liveconnect/config"
 )
 
@@ -11,7 +10,7 @@ func main() {
 	config.LoadConfig()
 
 	// DB初期化
-	models.InitDB()
+	// models.InitDB()
 
 	// サーバ起動
 	if err := controllers.StartMainServer(); err != nil {
